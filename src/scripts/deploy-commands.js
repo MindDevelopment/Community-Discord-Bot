@@ -12,6 +12,10 @@ function loadCommands(dir) {
   for (const entry of entries) {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) {
+      if (!config.setupEnabled && entry.name === 'setup') {
+        logger.info('Skipping setup commands (SETUP_ENABLED=false)');
+        continue;
+      }
       loadCommands(fullPath);
     } else if (entry.name.endsWith('.js')) {
       try {

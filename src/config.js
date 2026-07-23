@@ -25,11 +25,16 @@ const config = {
   },
 
   channels: {
-    suggestions: 'suggesties',
-    reports: 'reports',
-    welcome: 'welkom',
-    logs: 'logs',
+    suggestions: '💡-suggesties',
+    reports: '🚨-reports',
+    welcome: '📬-welkom',
+    leave: '👋-vaarwel',
+    modlogs: '📋-modlogs',
+    botlogs: '🤖-botlogs',
+    announcements: '📢-mededelingen',
   },
+
+  setupEnabled: process.env.SETUP_ENABLED === 'true',
 };
 
 module.exports = config;

@@ -1,6 +1,14 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const config = require('../../config');
 
+const CATEGORY_ICONS = {
+  info: 'ℹ️',
+  moderation: '🛡️',
+  utility: '🔧',
+  fun: '🎮',
+  community: '💬',
+};
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('help')
@@ -8,8 +16,8 @@ module.exports = {
   async execute(interaction) {
     const categories = {};
     for (const [, cmd] of interaction.client.commands) {
-      const category = cmd.data.name;
-      const catName = cmd.category || 'General';
+      if (cmd.hidden) continue;
+      const catName = cmd.category || 'other';
       if (!categories[catName]) categories[catName] = [];
       categories[catName].push(cmd.data);
     }
@@ -21,13 +29,13 @@ module.exports = {
       .setTimestamp()
       .setFooter({ text: 'Community Discord Bot' });
 
-    embed.addFields(
-      { name: 'ℹ️ Info', value: '`/ping`, `/help`, `/botinfo`', inline: false },
-      { name: '🛡️ Moderation', value: '`/kick`, `/ban`, `/clear`, `/timeout`, `/warn`, `/warnings`', inline: false },
-      { name: '🔧 Utility', value: '`/serverinfo`, `/userinfo`, `/avatar`', inline: false },
-      { name: '🎮 Fun', value: '`/8ball`, `/roll`', inline: false },
-      { name: '💬 Community', value: '`/suggest`, `/report`', inline: false }
-    );
+    const categoryOrder = ['info', 'moderation', 'utility', 'fun', 'community', 'other'];
+    for (const cat of categoryOrder) {
+      if (!categories[cat] || categories[cat].length === 0) continue;
+      const icon = CATEGORY_ICONS[cat] || '📁';
+      const cmdList = categories[cat].map(c => `\`/${c.name}\``).join(', ');
+      embed.addFields({ name: `${icon} ${cat.charAt(0).toUpperCase() + cat.slice(1)}`, value: cmdList, inline: false });
+    }
 
     await interaction.reply({ embeds: [embed], ephemeral: true });
   },

@@ -10,11 +10,16 @@ function loadCommands(dir) {
     const fullPath = path.join(dir, entry.name);
 
     if (entry.isDirectory()) {
+      if (!client.config.setupEnabled && entry.name === 'setup') {
+        client.logger.info('Skipping setup commands (SETUP_ENABLED=false)');
+        continue;
+      }
       loadCommands(fullPath);
     } else if (entry.name.endsWith('.js')) {
       try {
         const command = require(fullPath);
         if ('data' in command && 'execute' in command) {
+          command.category = path.basename(path.dirname(fullPath));
           client.commands.set(command.data.name, command);
           logger.debug(`Loaded command: ${command.data.name}`);
         } else {

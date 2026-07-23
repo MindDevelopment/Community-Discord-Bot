@@ -7,7 +7,12 @@ module.exports = {
   async execute(interaction) {
     if (interaction.isChatInputCommand()) {
       const command = client.commands.get(interaction.commandName);
-      if (!command) return;
+      if (!command) {
+        return interaction.reply({
+          content: 'This command is currently disabled or unavailable.',
+          ephemeral: true,
+        }).catch(() => {});
+      }
 
       if (command.cooldown) {
         const cooldowns = client.cooldowns;
