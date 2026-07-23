@@ -1,0 +1,18 @@
+{
+  "name": "community-discord-bot",
+  "version": "1.0.0",
+  "description": "A feature-rich Discord bot for community servers",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node src/index.js",
+    "deploy": "node src/scripts/deploy-commands.js"
+  },
+  "keywords": ["discord", "bot", "community", "discord.js"],
+  "license": "MIT",
+  "dependencies": {
+    "better-sqlite3": "^11.7.0",
+    "discord.js": "^14.18.0",
+    "dotenv": "^16.4.7"
+  }
+}
