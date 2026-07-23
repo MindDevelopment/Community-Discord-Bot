@@ -12,3 +12,5 @@
 
 ### Development Folders ###
 Dev/
+node_modules/
+.env
